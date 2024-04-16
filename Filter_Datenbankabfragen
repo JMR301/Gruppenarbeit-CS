@@ -5,7 +5,7 @@ conn = sqlite3.connect('top_insta_influencers_dataCSV.csv')
 cursor = conn.cursor()
 
 # Filter anwenden, um Personen zu finden, die mehr als 1000 Follower haben
-cursor.execute("SELECT * FROM chanel_info WHERE alter > 50.0")
+cursor.execute("SELECT * FROM chanel_info WHERE follower > 50.0")
 results = cursor.fetchall()
 
 # Die gefundenen Ergebnisse ausgeben
