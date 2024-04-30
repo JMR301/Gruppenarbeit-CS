@@ -14,6 +14,13 @@ df.columns = df.columns.str.strip()
 connection = sqlite3.connect('Influencer.db')
 # Step 4. Load data file to SQLite
 df. to_sql('Influencer Database',connection,if_exists='replace')
+
+query = "SELECT * FROM 'Influencer Database' LIMIT 3"
+
+# Daten aus der Datenbank lesen
+first_three_entries = pd.read_sql(query, connection)
+
 # Step 5. close connection
 connection.close()
-#was los
+
+print(first_three_entries)
