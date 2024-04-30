@@ -16,3 +16,4 @@ connection = sqlite3.connect('demo.db')
 df. to_sql('Influencer Database',connection,if_exists='replace')
 # Step 5. close connection
 connection.close()
+#was los
