@@ -1,19 +1,53 @@
-
-import streamlit as st 
-import pandas as pd
-import csv
 import sqlite3
-# Step 1. Laod data file
-csv_datei_pfad = 'top_insta_influencers_dataCSV.csv'
-df = pd. read_csv(csv_datei_pfad)
 
+# Verbindung zur SQLite-Datenbank herstellen
+connection = sqlite3.connect('Influencer.db')
+cursor = connection.cursor()
 
-# Step 2. Data Clean Up
-df.columns = df.columns.str.strip()
-# Step 3. Create/connect to a SQLite database
-connection = sqlite3. connect ('demo.db' )
-# Step 4. Load data file to SQLite
-# fail;replace; append
-df. to_sql('Influencer Database', connection, if_exists='replace')
-# Step 5. close connection
-connection.close()
+# Funktion zum Filtern nach Kategorien
+def filter_by_category(category):
+    cursor.execute("SELECT * FROM 'Influencer Database' WHERE Category=?", (category,))
+    rows = cursor.fetchall()
+    return rows
+    
+# Funktion zum Filtern nach einem Wertebereich
+def filter_by_range(column, min_val, max_val):
+    cursor.execute("SELECT * FROM 'Influencer Database' WHERE {} BETWEEN ? AND ?".format(column), (min_val, max_val))
+    rows = cursor.fetchall()
+    return rows
+
+# Filterfunktionen für die restlichen Kategorien
+def filter_by_posts(posts):
+    cursor.execute("SELECT * FROM 'Influencer Database' WHERE posts=?", (posts,))
+    rows = cursor.fetchall()
+    return rows
+
+def filter_by_followers(followers):
+    cursor.execute("SELECT * FROM 'Influencer Database' WHERE followers=?", (followers,))
+    rows = cursor.fetchall()
+    return rows
+
+def filter_by_avg_likes(avg_likes):
+    cursor.execute("SELECT * FROM 'Influencer Database' WHERE avg_likes=?", (avg_likes,))
+    rows = cursor.fetchall()
+    return rows
+
+def filter_by_60_day_eng_rate(rate):
+    cursor.execute("SELECT * FROM 'Influencer Database' WHERE 60_day_eng_rate=?", (rate,))
+    rows = cursor.fetchall()
+    return rows
+
+def filter_by_new_post_avg_like(average_like):
+    cursor.execute("SELECT * FROM 'Influencer Database' WHERE new_post_avg_like=?", (average_like,))
+    rows = cursor.fetchall()
+    return rows
+
+def filter_by_total_likes(total_likes):
+    cursor.execute("SELECT * FROM 'Influencer Database' WHERE total_likes=?", (total_likes,))
+    rows = cursor.fetchall()
+    return rows
+
+def filter_by_country(country):
+    cursor.execute("SELECT * FROM 'Influencer Database' WHERE country=?", (country,))
+    rows = cursor.fetchall()
+    return rows
