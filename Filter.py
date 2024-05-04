@@ -36,3 +36,5 @@ class InfluencerFilter:
 
     def filter_by_country(self, country):
         return self.df[self.df['country'] == country]
+
+#warum funzt der commit nicht

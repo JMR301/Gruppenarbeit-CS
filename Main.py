@@ -17,7 +17,6 @@ df.to_sql('Influencer Database',connection,if_exists='replace')
 
 
 
-
 query1 = "SELECT * FROM 'Influencer Database'"
 
 # SQL-Abfrage, um eine einzelne Spalte abzufragen
@@ -52,3 +51,5 @@ connection.close()
 print(Tablename)
 #print(first_three_entries)
 #print(selected_column)
+
+#warum funzt der commit nicht
