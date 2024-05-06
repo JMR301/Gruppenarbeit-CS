@@ -43,11 +43,16 @@ options = {
     'avg_likes': 'average Likes',
     'followers': 'followers',
     'Category': 'Category',
-    'country': 'Country'
+    'country': 'ountry'
             }
 
  #Streamlit-App
 st.header ('Filter Recommendations')
+
+
+
+
+# Hier ist der neue Filter
 
  #Benutzereingaben für Filteroptionen
 selected_options = {}
