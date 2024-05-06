@@ -43,7 +43,7 @@ options = {
     'avg_likes': 'average Likes',
     'followers': 'followers',
     'Category': 'Category',
-    'country': 'country'
+    'country': 'Country'
             }
 
  #Streamlit-App
