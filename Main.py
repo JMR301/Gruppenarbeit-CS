@@ -7,7 +7,7 @@ import sqlite3
 from Filter import InfluencerFilter
 # Step 1. Load data file
 csv_datei_pfad = '/Users/janreeg/HSG/Informatik/Gruppenarbeit CS/top_insta_influencers_dataCSV.csv'
-df = pd.read_csv(csv_datei_pfad, sep=';')
+df = pd.read_csv(csv_datei_pfad, encoding= 'latin1', sep=';')
 
 
 # Step 2. Data Clean Up
@@ -25,25 +25,21 @@ query1 = "SELECT * FROM 'Influencer Database'"
 
 
 
-
-
-
-
-query4 = "PRAGMA table_info(Influencer Database)"
+query4 = "PRAGMA table_info('Influencer Database')"
 
 #Tabellennamen abfragen
 query5 = "SELECT name FROM sqlite_master WHERE type='table';"
-
+namen = pd.read_sql(query4, connection)
 Tablename = pd.read_sql(query5, connection)
 Datenbank = pd.read_sql(query1, connection)
 #df = pd.DataFrame(query1 )
 
  #Dropdown-Optionen für Filterung
 options = {
-    'avg_likes': 'average Likes',
-    'followers': 'followers',
-    'Category': 'Category',
-    'country': 'ountry'
+    'Durchschnittliche Likes': 'Durchschnittliche Likes',
+    'Abonnenten': 'followers',
+    'Kategorie': 'Category',
+    'Land': 'country'
             }
 
  #Streamlit-App
