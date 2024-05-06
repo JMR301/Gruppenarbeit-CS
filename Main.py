@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import csv
+
+
 import sqlite3
 from Filter import InfluencerFilter
 # Step 1. Load data file
@@ -19,18 +21,13 @@ df.to_sql('Influencer Database',connection,if_exists='replace')
 
 query1 = "SELECT * FROM 'Influencer Database'"
 
-# SQL-Abfrage, um eine einzelne Spalte abzufragen
-#query2 = "SELECT Category FROM 'Influencer Database'"
-
-# Daten aus der Datenbank lesen
-#selected_column = pd.read_sql(query2 , connection)
-
-# Daten aus der Datenbank lesen
-first_three_entries = pd.read_sql(query1, connection)
 
 
-# Daten aus der Datenbank lesen
-#df = pd.read_sql(query3, connection)
+
+
+
+
+
 
 query4 = "PRAGMA table_info(Influencer Database)"
 
@@ -38,6 +35,37 @@ query4 = "PRAGMA table_info(Influencer Database)"
 query5 = "SELECT name FROM sqlite_master WHERE type='table';"
 
 Tablename = pd.read_sql(query5, connection)
+Datenbank = pd.read_sql(query1, connection)
+#df = pd.DataFrame(query1 )
+
+ #Dropdown-Optionen für Filterung
+options = {
+    'avg_likes': 'average Likes',
+    'followers': 'followers',
+    'Category': 'Category',
+    'country': 'country'
+            }
+
+ #Streamlit-App
+st.header ('Filter Recommendations')
+
+ #Benutzereingaben für Filteroptionen
+selected_options = {}
+for key, value in options.items():
+    selected_options[key] = st.multiselect(f'Select {value}', df[key].unique())
+
+ #Filterung des DataFrame basierend auf den Benutzereingaben
+filtered_df = df.copy()
+for key, values in selected_options.items():
+    if values:
+        filtered_df = filtered_df[filtered_df[key].isin(values)]
+
+# Ergebnis anzeigen
+st.header('Filtered Recommendations')
+st.dataframe(filtered_df)
+
+
+
 
 
 
@@ -48,7 +76,8 @@ connection.close()
 
 #print("Spaltennamen:")
 
-print(Tablename)
+print(query1)
+print(df)
 #print(first_three_entries)
 #print(selected_column)
 
