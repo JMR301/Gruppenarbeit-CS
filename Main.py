@@ -47,7 +47,7 @@ st.header ('Filter Recommendations')
 #Benutzereingaben für Filteroptionen
 selected_options = {}
 for option in df.columns.array:
-    if option in ['Durchschnittliche Likes', 'Abonnenten', 'Influencerscore', 'Beiträge', 'Durschnittliche Likes neuer Posts', 'Engagement Rate', 'Gesamte Likes']:
+    if option in ['Durchschnittliche Likes', 'Abonnenten', 'Influencerscore', 'BeitrÃ¤ge', 'Durschnittliche Likes neuer Posts', 'Engagement Rate', 'Gesamte Likes']:
         min_val, max_val = df[option].min(), df[option].max()
         # Überprüfen Sie, ob die Werte numerisch sind, bevor sie an den Slider übergeben werden
         if pd.api.types.is_numeric_dtype(df[option]):
