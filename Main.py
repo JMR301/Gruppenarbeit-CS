@@ -17,10 +17,9 @@ connection = sqlite3.connect('Influencer.db')
 # Step 4. Load data file to SQLite
 df.to_sql('Influencer Database',connection,if_exists='replace')
 
-
+print(len(df.columns))
 
 query1 = "SELECT * FROM 'Influencer Database'"
-
 
 
 
@@ -34,29 +33,31 @@ Tablename = pd.read_sql(query5, connection)
 Datenbank = pd.read_sql(query1, connection)
 #df = pd.DataFrame(query1 )
 
- #Dropdown-Optionen für Filterung
-options = {
-    'Durchschnittliche Likes': 'Durchschnittliche Likes',
-    'Abonnenten': 'followers',
-    'Kategorie': 'Category',
-    'Land': 'country'
-            }
+
+
 
  #Streamlit-App
 st.header ('Filter Recommendations')
 
 
 
-
 # Hier ist der neue Filter
-#warum geht das nicht
 
- #Benutzereingaben für Filteroptionen
+
+#Benutzereingaben für Filteroptionen
 selected_options = {}
-for key, value in options.items():
-    selected_options[key] = st.multiselect(f'Select {value}', df[key].unique())
-
- #Filterung des DataFrame basierend auf den Benutzereingaben
+for option in df.columns.array:
+    if option in ['Durchschnittliche Likes', 'Abonnenten', 'Influencerscore', 'Beiträge', 'Durschnittliche Likes neuer Posts', 'Engagement Rate', 'Gesamte Likes']:
+        min_val, max_val = df[option].min(), df[option].max()
+        # Überprüfen Sie, ob die Werte numerisch sind, bevor sie an den Slider übergeben werden
+        if pd.api.types.is_numeric_dtype(df[option]):
+            selected_options[option] = st.slider(f'Select {option}', min_value=min_val, max_value=max_val, value=(min_val, max_val))
+        else:
+            st.warning(f"The '{option}' column contains non-numeric data and cannot be used with a slider.")
+            selected_options[option] = []
+    #elif: 
+    else:
+        selected_options[option] = st.multiselect(f'Select {option}', df[option].unique())
 filtered_df = df.copy()
 for key, values in selected_options.items():
     if values:
@@ -80,6 +81,7 @@ connection.close()
 
 print(query1)
 print(df)
+print(df.columns.array)
 #print(first_three_entries)
 #print(selected_column)
 
