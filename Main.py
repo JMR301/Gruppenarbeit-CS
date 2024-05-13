@@ -40,7 +40,7 @@ namen = pd.read_sql(query4, connection)
 
 def clean_numeric(x):
     if isinstance(x, str):
-        return float(x.replace('k', '000').replace('m', '000000').replace('b', '000000000'))
+        return float(x.replace("k", "000").replace("m", "000000").replace("b", "000000000").replace('.', ''))
     return x
 
 
@@ -52,8 +52,9 @@ df['Engagement Rate'] = df['Engagement Rate'].str.rstrip('%').astype('float') / 
 df['Durchschnittliche Likes neuer Posts'] = df['Durchschnittliche Likes neuer Posts'].apply(clean_numeric)
 df['Gesamte Likes'] = df['Gesamte Likes'].apply(clean_numeric)
 
+print(df['Gesamte Likes'])
 #converting string to float
-print(df['Durchschnittliche Likes'])
+#print(df['Durchschnittliche Likes'])
 
 Datenbank = pd.read_sql(query1, connection)
 Tablename = pd.read_sql(query5, connection)
@@ -79,18 +80,25 @@ for option in df.columns.array:
     #elif: 
     else:
         selected_options[option] = st.multiselect(f'Select {option}', df[option].unique())
-
+ 
 filtered_df = df.copy()
 for key, values in selected_options.items():
     if values:
-        filtered_df = filtered_df[filtered_df[key].isin(values)]
+        if key in ['Durchschnittliche Likes', 'Abonnenten', 'Influencerscore', 'BeitrÃ¤ge', 'Durschnittliche Likes neuer Posts', 'Engagement Rate', 'Gesamte Likes']:
+            filtered_df = filtered_df[filtered_df[key].between(values[0],values[1])]
+        else:
+
+            print(filtered_df[filtered_df[key].isin(values)])
+            filtered_df = filtered_df[filtered_df[key].isin(values)]
+       
+        
 
 
 
 #Hier startet die Visualisierung
 
 def millions(x):
-    return f"{float(x.replace('.', '').replace(',', '.')) / 1000000}"
+    return f"{float(x / 1000000)}"
 
 
 
