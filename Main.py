@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import csv
+import matplotlib.pyplot as plt
 
 
 import sqlite3
@@ -12,8 +13,10 @@ df = pd.read_csv(csv_datei_pfad, encoding= 'latin1', sep=';')
 
 # Step 2. Data Clean Up
 df.columns = df.columns.str.strip()
+
 # Step 3. Create/connect to a SQLite database
 connection = sqlite3.connect('Influencer.db')
+
 # Step 4. Load data file to SQLite
 df.to_sql('Influencer Database',connection,if_exists='replace')
 
@@ -29,14 +32,32 @@ query4 = "PRAGMA table_info('Influencer Database')"
 #Tabellennamen abfragen
 query5 = "SELECT name FROM sqlite_master WHERE type='table';"
 namen = pd.read_sql(query4, connection)
-Tablename = pd.read_sql(query5, connection)
-Datenbank = pd.read_sql(query1, connection)
+
+
 #df = pd.DataFrame(query1 )
 
+# Data cleaning and type conversion for k, m
+
+def clean_numeric(x):
+    if isinstance(x, str):
+        return float(x.replace('k', '000').replace('m', '000000').replace('b', '000000000'))
+    return x
 
 
 
- #Streamlit-App
+df['BeitrÃ¤ge'] = df['BeitrÃ¤ge'].apply(clean_numeric)
+df['Abonnenten'] = df['Abonnenten'].apply(clean_numeric)
+df['Durchschnittliche Likes'] = df['Durchschnittliche Likes'].apply(clean_numeric)
+df['Engagement Rate'] = df['Engagement Rate'].str.rstrip('%').astype('float') / 100
+df['Durchschnittliche Likes neuer Posts'] = df['Durchschnittliche Likes neuer Posts'].apply(clean_numeric)
+df['Gesamte Likes'] = df['Gesamte Likes'].apply(clean_numeric)
+
+#converting string to float
+print(df['Durchschnittliche Likes'])
+
+Datenbank = pd.read_sql(query1, connection)
+Tablename = pd.read_sql(query5, connection)
+#Streamlit-App
 st.header ('Filter Recommendations')
 
 
@@ -58,10 +79,29 @@ for option in df.columns.array:
     #elif: 
     else:
         selected_options[option] = st.multiselect(f'Select {option}', df[option].unique())
+
 filtered_df = df.copy()
 for key, values in selected_options.items():
     if values:
         filtered_df = filtered_df[filtered_df[key].isin(values)]
+
+
+
+#Hier startet die Visualisierung
+
+def millions(x):
+    return f"{float(x.replace('.', '').replace(',', '.')) / 1000000}"
+
+
+
+df_sorted = filtered_df.sort_values(by="Abonnenten").iloc[:20]
+df_sorted['Abonnenten'] = df_sorted['Abonnenten'].apply(millions)
+df_sorted['Gesamte Likes'] = df_sorted['Gesamte Likes'].apply(millions)
+fig, ax = plt.subplots()
+ax.scatter(df_sorted['Abonnenten'], df_sorted['Gesamte Likes'])
+ax.set_xlabel('Abonnenten (mio)')
+ax.set_ylabel('Gesamte Likes (mio)')
+st.pyplot(fig)
 
 # Ergebnis anzeigen
 st.header('Filtered Recommendations')
@@ -75,13 +115,13 @@ st.dataframe(filtered_df)
 # Step 5. close connection
 connection.close()
 
-
+print(filtered_df)
 
 #print("Spaltennamen:")
 
-print(query1)
-print(df)
-print(df.columns.array)
+#print(query1)
+#print(df)
+#print(df.columns.array)
 #print(first_three_entries)
 #print(selected_column)
 
