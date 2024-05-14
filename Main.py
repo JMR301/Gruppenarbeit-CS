@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 import sqlite3
-from Filter import InfluencerFilter
+
 # Step 1. Load data file
 csv_datei_pfad = '/Users/janreeg/HSG/Informatik/Gruppenarbeit CS/top_insta_influencers_dataCSV.csv'
 df = pd.read_csv(csv_datei_pfad, encoding= 'latin1', sep=';')
@@ -34,7 +34,7 @@ query5 = "SELECT name FROM sqlite_master WHERE type='table';"
 namen = pd.read_sql(query4, connection)
 
 
-#df = pd.DataFrame(query1 )
+#df = pd.DataFrame(query1)
 
 # Data cleaning and type conversion for k, m
 
