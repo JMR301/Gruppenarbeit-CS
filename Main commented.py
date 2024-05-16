@@ -25,18 +25,18 @@ def page_team():
 def page_tool():
     st.title("Das Tool")
     
-    # Step 1. Load data file
+    # Schritt 1. Datei laden
     csv_datei_pfad = '/Users/moritz/CsProjekt/top_insta_influencers_dataCSV.csv'
     df = pd.read_csv(csv_datei_pfad, encoding= 'latin1', sep=';')
 
 
-    # Step 2. Data Clean Up
+    # Schritt 2. Datenbereinigung
     df.columns = df.columns.str.strip()
 
-    # Step 3. Create/connect to a SQLite database
+    # Schritt 3. Erstelle/Verbindung zu SQLite database C
     connection = sqlite3.connect('Influencer.db')
 
-    # Step 4. Load data file to SQLite
+    # Schritt 4. Lade Datei in SQLite
     df.to_sql('Influencer Database',connection,if_exists='replace')
 
     print(len(df.columns))
@@ -54,7 +54,7 @@ def page_tool():
 
     #df = pd.DataFrame(query1)
 
-    # Data cleaning and type conversion for k, m
+    # Datenbereinigung und Konvertierung der Datentypen für k, m
     def clean_numeric(x):
         if isinstance(x, str):
             return float(x.replace("k", "0").replace("m", "00000").replace("b", "00000000").replace('.', ''))
@@ -70,7 +70,7 @@ def page_tool():
     df['Gesamte Likes'] = df['Gesamte Likes'].apply(clean_numeric)
 
     print(df['Gesamte Likes'])
-    #converting string to float
+    #Konvertierung float to string
     #print(df['Durchschnittliche Likes'])
 
 
@@ -142,14 +142,14 @@ def page_tool():
 
 
 
-    # Step 5. close connection
+    # Schritt 5. Verbindung zur Datenbank schließen
     connection.close()
 
     print(filtered_df)
 
 
 
-# Codierung des Algorithmus
+# Kodierung des Algorithmus
 def page_algo():
 
     # Step 1. Laden der Daten
